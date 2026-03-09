@@ -62,7 +62,7 @@ const NoteForm = ({ onClose }: NoteFormProps) => {
           onChange={(e) =>
           setDraft({
       ...draft,
-      tag: e.target.value as Note["tag"],
+      content: e.target.value,
     })}
         />
       </div>
