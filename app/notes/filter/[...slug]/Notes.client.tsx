@@ -17,7 +17,7 @@ interface NotesClientProps {
 }
 
 export default function NotesClient({ tag }: NotesClientProps) {
- const [currentPage, setCurrentPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0); // 0-based
   const [localSearchQuery, setLocalSearchQuery] = useState("");
   const [debouncedQuery] = useDebounce(localSearchQuery, 500);
 
@@ -41,7 +41,7 @@ export default function NotesClient({ tag }: NotesClientProps) {
     (value: string) => {
       const lowerCaseValue = value.toLowerCase();
       if (lowerCaseValue !== localSearchQuery) {
-        setCurrentPage(1);
+        setCurrentPage(0);
         setLocalSearchQuery(lowerCaseValue);
       }
     },
@@ -52,15 +52,6 @@ export default function NotesClient({ tag }: NotesClientProps) {
     <div className={css.app}>
       <header className={css.toolbar}>
         <SearchBox value={localSearchQuery} onChange={handleSearchChange} />
-
-        {data && data.totalPages > 1 && (
-          <Pagination
-            totalPages={data.totalPages}
-            onPageChange={handlePageChange}
-            currentPage={currentPage}
-          />
-        )}
-
         <Link href="/notes/action/create" className={css.button}>
           Create note +
         </Link>
@@ -69,7 +60,16 @@ export default function NotesClient({ tag }: NotesClientProps) {
       {isLoading ? (
         <p>Loading...</p>
       ) : data?.notes && data.notes.length > 0 ? (
-        <NoteList notes={data.notes} />
+        <>
+          <NoteList notes={data.notes} />
+          {data.totalPages > 1 && (
+            <Pagination
+              totalPages={data.totalPages}
+              onPageChange={handlePageChange}
+              currentPage={currentPage}
+            />
+          )}
+        </>
       ) : (
         <p>Nothing found</p>
       )}
