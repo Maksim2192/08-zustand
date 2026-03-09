@@ -17,13 +17,13 @@ interface NotesClientProps {
 }
 
 export default function NotesClient({ tag }: NotesClientProps) {
-  const [currentPage, setCurrentPage] = useState(1);
+ const [currentPage, setCurrentPage] = useState(0);
   const [localSearchQuery, setLocalSearchQuery] = useState("");
   const [debouncedQuery] = useDebounce(localSearchQuery, 500);
 
   const { data, error, isLoading } = useQuery<FetchNotesResponse, Error>({
     queryKey: ["notes", currentPage, debouncedQuery, tag],
-    queryFn: () => fetchNotes(debouncedQuery, currentPage, tag),
+    queryFn: () => fetchNotes(debouncedQuery, currentPage + 1, tag),
     placeholderData: keepPreviousData,
     refetchOnWindowFocus: false,
     staleTime: 5 * 60 * 1000,
@@ -57,7 +57,7 @@ export default function NotesClient({ tag }: NotesClientProps) {
           <Pagination
             totalPages={data.totalPages}
             onPageChange={handlePageChange}
-            currentPage={currentPage - 1}
+            currentPage={currentPage}
           />
         )}
 
