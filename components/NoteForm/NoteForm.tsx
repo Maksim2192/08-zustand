@@ -12,7 +12,6 @@ type NoteFormProps = {
 
 const NoteForm = ({ onClose }: NoteFormProps) => {
   const queryClient = useQueryClient();
-
   const { draft, setDraft, clearDraft } = useNoteDraftStore();
 
   const mutation = useMutation({
@@ -59,11 +58,7 @@ const NoteForm = ({ onClose }: NoteFormProps) => {
           className={css.textarea}
           maxLength={500}
           value={draft.content}
-          onChange={(e) =>
-          setDraft({
-      ...draft,
-      content: e.target.value,
-    })}
+          onChange={(e) => setDraft({ ...draft, content: e.target.value })}
         />
       </div>
 
@@ -75,7 +70,9 @@ const NoteForm = ({ onClose }: NoteFormProps) => {
           className={css.select}
           required
           value={draft.tag}
-          onChange={(e) => setDraft({ ...draft, tag: e.target.value as Note["tag"] })}
+          onChange={(e) =>
+            setDraft({ ...draft, tag: e.target.value as Note["tag"] })
+          }
         >
           <option value="Todo">Todo</option>
           <option value="Work">Work</option>
@@ -89,8 +86,11 @@ const NoteForm = ({ onClose }: NoteFormProps) => {
         <button type="button" className={css.cancelButton} onClick={onClose}>
           Cancel
         </button>
-
-        <button type="submit" className={css.submitButton} disabled={mutation.isPending}>
+        <button
+          type="submit"
+          className={css.submitButton}
+          disabled={mutation.isPending}
+        >
           {mutation.isPending ? "Creating..." : "Create note"}
         </button>
       </div>
